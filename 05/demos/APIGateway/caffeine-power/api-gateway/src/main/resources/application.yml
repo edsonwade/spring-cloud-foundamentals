@@ -1,0 +1,32 @@
+server:
+  port: 8088
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      enabled: false
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: coffee-service
+          uri: lb://coffee-service
+          predicates:
+            - Path=/coffee/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
